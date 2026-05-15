@@ -3,7 +3,7 @@
 =================================================================== */
 
 /* --- MATERIAL DESIGN ICONS --- */
-.rmu-combat-narrator-icon {
+.rmu-combat-storyboard-icon {
     display: inline-block;
     width: var(--filroden-font-size-l); 
     height: var(--filroden-font-size-l);
@@ -21,42 +21,43 @@
     margin: 0;
 }
 
-.rmu-combat-narrator-icon.wizard     { -webkit-mask-image: url('../icons/swords.svg'); mask-image: url('../icons/swords.svg'); }
+.rmu-combat-storyboard-icon.wizard     { -webkit-mask-image: url('../icons/swords.svg'); mask-image: url('../icons/swords.svg'); }
+.rmu-combat-storyboard-icon.download     { -webkit-mask-image: url('../icons/download.svg'); mask-image: url('../icons/download.svg'); }
 
 
 /* --- APPLICATION SCROLLBARS --- */
-.rmu-combat-narrator-window * {
+.rmu-combat-storyboard-window * {
     scrollbar-width: auto !important;
     scrollbar-color: auto !important;
 }
 
-.rmu-combat-narrator-window .rmu-combat-narrator-window-scrollable::-webkit-scrollbar {
+.rmu-combat-storyboard-window .rmu-combat-storyboard-window-scrollable::-webkit-scrollbar {
     width: 8px !important;
     height: 8px !important;
 }
 
-.rmu-combat-narrator-window .rmu-combat-narrator-window-scrollable::-webkit-scrollbar-track {
+.rmu-combat-storyboard-window .rmu-combat-storyboard-window-scrollable::-webkit-scrollbar-track {
     background: var(--filroden-color-bg-hover-solid) !important;
     border-radius: var(--filroden-radius-large) !important;
 }
 
-.rmu-combat-narrator-window .rmu-combat-narrator-window-scrollable::-webkit-scrollbar-thumb {
+.rmu-combat-storyboard-window .rmu-combat-storyboard-window-scrollable::-webkit-scrollbar-thumb {
     background-color: var(--filroden-color-text-accent) !important;
     border-radius: var(--filroden-radius-large) !important;
     border: 1px solid rgba(0, 0, 0, 0.6) !important;
 }
 
-.rmu-combat-narrator-window .rmu-combat-narrator-window-scrollable::-webkit-scrollbar-thumb:hover {
+.rmu-combat-storyboard-window .rmu-combat-storyboard-window-scrollable::-webkit-scrollbar-thumb:hover {
     background-color: var(--filroden-color-text-accent-hover) !important;
 }
 
-.rmu-combat-narrator-window .rmu-combat-narrator-window-scrollable::-webkit-scrollbar-button {
+.rmu-combat-storyboard-window .rmu-combat-storyboard-window-scrollable::-webkit-scrollbar-button {
     display: none;
 }
 
 
 /* --- TOOLTIPS --- */
-#tooltip.rmu-combat-narrator-tooltip {
+#tooltip.rmu-combat-storyboard-tooltip {
     max-width: 300px !important;
     border: 1px solid var(--filroden-color-text-accent);
     border-radius: var(--filroden-radius-small);
@@ -75,7 +76,7 @@
 
 /* --- BUTTONS --- */
 /* Standard button styles for all buttons */
-.rmu-combat-narrator-window button {
+.rmu-combat-storyboard-window button {
     background: var(--filroden-color-bg-light-solid);
     border: 1px solid var(--filroden-color-border);
     color: var(--filroden-color-text-main-solid);
@@ -85,7 +86,7 @@
     transition: all 0.1s ease;
 }
 
-.rmu-combat-narrator-window button:hover {
+.rmu-combat-storyboard-window button:hover {
     background: var(--filroden-color-bg-hover-solid);
     border-color: var(--filroden-color-text-accent);
     color: var(--filroden-color-text-main-solid);
@@ -93,7 +94,7 @@
 }
 
 /* Variant styles for primary and danger buttons */
-.rmu-combat-narrator-window .rmu-combat-narrator-btn {
+.rmu-combat-storyboard-window .rmu-combat-storyboard-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,36 +105,36 @@
     padding: var(--filroden-space-s) var(--filroden-space-m);
 }
 
-.rmu-combat-narrator-window .rmu-combat-narrator-btn:hover {
+.rmu-combat-storyboard-window .rmu-combat-storyboard-btn:hover {
     background: var(--filroden-color-bg-hover-solid);
     border-color: var(--filroden-color-text-accent);
     color: var(--filroden-color-text-main-solid);
 }
 
-.rmu-combat-narrator-window .rmu-combat-narrator-btn.danger {
+.rmu-combat-storyboard-window .rmu-combat-storyboard-btn.danger {
     color: var(--filroden-color-danger);
     width: 100%;
 }
 
-.rmu-combat-narrator-window .rmu-combat-narrator-btn.danger:hover {
+.rmu-combat-storyboard-window .rmu-combat-storyboard-btn.danger:hover {
     color: var(--filroden-color-danger);
 }
 
-.rmu-combat-narrator-window .rmu-combat-narrator-btn.primary {
+.rmu-combat-storyboard-window .rmu-combat-storyboard-btn.primary {
     color: var(--filroden-color-text-accent);
 }
 
-.rmu-combat-narrator-window .rmu-combat-narrator-btn.primary:hover {
-    color: var(--filroden-color-text-accent);
+.rmu-combat-storyboard-window .rmu-combat-storyboard-btn.primary:hover {
+    color: var(--filroden-color-text-accent-hover);
 }
 
 
 /* --- INPUTS AND SELECTS --- */
-.rmu-combat-narrator input[type="text"],
-.rmu-combat-narrator input[type="number"],
-.rmu-combat-narrator input[type="time"],
-.rmu-combat-narrator select,
-.rmu-combat-narrator textarea {
+.rmu-combat-storyboard input[type="text"],
+.rmu-combat-storyboard input[type="number"],
+.rmu-combat-storyboard input[type="time"],
+.rmu-combat-storyboard select,
+.rmu-combat-storyboard textarea {
     background: var(--filroden-color-bg-medium-solid);
     border: 1px solid var(--filroden-color-border);
     color: var(--filroden-color-text-main-solid);
@@ -144,60 +145,60 @@
     width: fit-content;
 }
 
-.rmu-combat-narrator input[type="text"]:focus,
-.rmu-combat-narrator input[type="number"]:focus,
-.rmu-combat-narrator input[type="time"],
-.rmu-combat-narrator select:focus,
-.rmu-combat-narrator textarea:focus {
+.rmu-combat-storyboard input[type="text"]:focus,
+.rmu-combat-storyboard input[type="number"]:focus,
+.rmu-combat-storyboard input[type="time"],
+.rmu-combat-storyboard select:focus,
+.rmu-combat-storyboard textarea:focus {
     border-color: var(--filroden-color-text-accent);
     box-shadow: var(--filroden-shadow-focus);
 }
 
-.rmu-combat-narrator input::placeholder,
-.rmu-combat-narrator textarea::placeholder {
+.rmu-combat-storyboard input::placeholder,
+.rmu-combat-storyboard textarea::placeholder {
     color: var(--filroden-color-text-placeholder-solid);
     opacity: 1;
     font-style: italic;
 }
 
-.rmu-combat-narrator input[type="time"]::-webkit-calendar-picker-indicator {
+.rmu-combat-storyboard input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
 }
 
-.rmu-combat-narrator textarea {
+.rmu-combat-storyboard textarea {
     resize: vertical;
     font-family: monospace;
     line-height: var(--filroden-line-height-body);
 }
 
-.rmu-combat-narrator select,
-.rmu-combat-narrator select::picker(select) {
+.rmu-combat-storyboard select,
+.rmu-combat-storyboard select::picker(select) {
     appearance: base-select;
 }
 
-.rmu-combat-narrator select::picker(select) {
+.rmu-combat-storyboard select::picker(select) {
     position-area: top;
     margin-block-end: var(--filroden-space-xs);
     border: 1px solid var(--filroden-color-text-accent);
 }
 
-.rmu-combat-narrator option {
+.rmu-combat-storyboard option {
     background: var(--filroden-color-bg-medium-solid);
     color: var(--filroden-color-text-main-solid);
 }
 
-.rmu-combat-narrator option:hover {
+.rmu-combat-storyboard option:hover {
     background: var(--filroden-color-text-accent);
     color: var(--filroden-color-text-on-accent);
 }
 
-.rmu-combat-narrator option:focus {
+.rmu-combat-storyboard option:focus {
     outline: none;
 }
 
 /* --- CHECKBOXES AND RADIO BUTTONS --- */
-.rmu-combat-narrator-checkbox,
-.rmu-combat-narrator-radio {
+.rmu-combat-storyboard-checkbox,
+.rmu-combat-storyboard-radio {
     appearance: auto;
     accent-color: var(--filroden-color-text-accent);
     color-scheme: dark;
@@ -210,27 +211,27 @@
     text-align: center;
 }
 
-.rmu-combat-narrator-checkbox::before,
-.rmu-combat-narrator-checkbox::after,
-.rmu-combat-narrator-radio::before,
-.rmu-combat-narrator-radio::after {
+.rmu-combat-storyboard-checkbox::before,
+.rmu-combat-storyboard-checkbox::after,
+.rmu-combat-storyboard-radio::before,
+.rmu-combat-storyboard-radio::after {
     content: none;
 }
 
 
 /* --- ACCESSIBILITY INTERACTIONS --- */
-.rmu-combat-narrator *:focus-visible,
-.rmu-combat-narrator *:focus {
+.rmu-combat-storyboard *:focus-visible,
+.rmu-combat-storyboard *:focus {
     outline: 2px solid var(--filroden-color-text-accent);
 }
 
-.rmu-combat-narrator a:hover {
+.rmu-combat-storyboard a:hover {
     text-shadow: none;
 }
 
-.rmu-combat-narrator button.active,
-.rmu-combat-narrator [class*="rmu-combat-narrator-"][class*="-btn"].active,
-.rmu-combat-narrator .rmu-combat-narrator-pill.active {
+.rmu-combat-storyboard button.active,
+.rmu-combat-storyboard [class*="rmu-combat-storyboard-"][class*="-btn"].active,
+.rmu-combat-storyboard .rmu-combat-storyboard-pill.active {
     outline: none;
     box-shadow: none;
 }
@@ -238,7 +239,7 @@
 
 /* --- APPLICATION LAYOUTS --- */
 /* Standard two-column wrapper */
-.rmu-combat-narrator .rmu-combat-narrator-layout {
+.rmu-combat-storyboard .rmu-combat-storyboard-layout {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -247,7 +248,7 @@
 }
 
 /* Standard Sidebar */
-.rmu-combat-narrator .rmu-combat-narrator-sidebar {
+.rmu-combat-storyboard .rmu-combat-storyboard-sidebar {
     flex: 0 0 15rem; /* Default width, easily overridden */
     display: flex;
     flex-direction: column;
@@ -259,7 +260,7 @@
 }
 
 /* Standard Main Content Area */
-.rmu-combat-narrator .rmu-combat-narrator-main {
+.rmu-combat-storyboard .rmu-combat-storyboard-main {
     display: none;
     width: 100%;
     flex-direction: column;
@@ -267,7 +268,7 @@
     min-width: 0; /* Prevents flexbox text overflow issues */
 }
 
-.rmu-combat-narrator .rmu-combat-narrator-main.active {
+.rmu-combat-storyboard .rmu-combat-storyboard-main.active {
     display: flex;
     height: auto; /* Shrink to fit content */
     max-height: 100%; /* Constrain to parent's max-height */
@@ -276,16 +277,16 @@
 
 
 /* --- TABBED NAVIGATION --- */
-.rmu-combat-narrator nav.tabs,
-.rmu-combat-narrator .rmu-combat-narrator-tabs {
+.rmu-combat-storyboard nav.tabs,
+.rmu-combat-storyboard .rmu-combat-storyboard-tabs {
     display: flex;
     flex: 0 0 auto;
     background: var(--filroden-color-bg-medium-solid);
     border-block-end: 1px solid var(--filroden-color-border);
 }
 
-.rmu-combat-narrator nav.tabs .item,
-.rmu-combat-narrator .rmu-combat-narrator-tabs .item {
+.rmu-combat-storyboard nav.tabs .item,
+.rmu-combat-storyboard .rmu-combat-storyboard-tabs .item {
     flex: 1;
     text-align: center;
     padding: var(--filroden-space-s);
@@ -297,14 +298,14 @@
     transition: background-color 0.2s, color 0.2s;
 }
 
-.rmu-combat-narrator nav.tabs .item:hover,
-.rmu-combat-narrator .rmu-combat-narrator-tabs .item:hover {
+.rmu-combat-storyboard nav.tabs .item:hover,
+.rmu-combat-storyboard .rmu-combat-storyboard-tabs .item:hover {
     color: var(--filroden-color-text-main-solid);
     background: var(--filroden-color-bg-hover-solid);
 }
 
-.rmu-combat-narrator nav.tabs .item.active,
-.rmu-combat-narrator .rmu-combat-narrator-tabs .item.active {
+.rmu-combat-storyboard nav.tabs .item.active,
+.rmu-combat-storyboard .rmu-combat-storyboard-tabs .item.active {
     color: var(--filroden-color-text-accent);
     border-bottom-color: var(--filroden-color-text-accent);
     background: var(--filroden-color-bg-darkest);
@@ -312,7 +313,7 @@
 
 
 /* --- STRUCTURED FORMS --- */
-.rmu-combat-narrator fieldset.rmu-combat-narrator-fieldset {
+.rmu-combat-storyboard fieldset.rmu-combat-storyboard-fieldset {
     border: var(--filroden-border-main);
     border-radius: var(--filroden-radius-medium);
     padding: var(--filroden-space-m);
@@ -322,14 +323,14 @@
     flex-direction: column;
 }
 
-.rmu-combat-narrator fieldset.rmu-combat-narrator-fieldset legend {
+.rmu-combat-storyboard fieldset.rmu-combat-storyboard-fieldset legend {
     font-weight: bold;
     color: var(--filroden-color-text-accent);
     padding-inline: var(--filroden-space-xs);
     font-size: var(--filroden-font-size-s);
 }
 
-.rmu-combat-narrator .form-group {
+.rmu-combat-storyboard .form-group {
     display: grid;
     grid-template-columns: max-content minmax(0, 1fr);
     align-items: center;
@@ -338,22 +339,30 @@
 }
 
 /* Push shrink-wrapped inputs to the far edge of the window */
-.rmu-combat-narrator .form-group .form-fields {
+.rmu-combat-storyboard .form-group .form-fields {
     display: flex;
     justify-content: flex-end;
     width: 100%;
 }
 
-.rmu-combat-narrator .form-group label {
+.rmu-combat-storyboard .form-group label {
     margin: 0;
     color: var(--filroden-color-text-main-solid);
     white-space: nowrap;
 }
 
 /* --- SEMANTIC TEXT & STATES --- */
+
+.rmu-combat-storyboard .event-details {
+    background-color: var(--filroden-color-bg-medium-solid);
+    padding: var(--filroden-space-l);
+    border-radius: var(--filroden-radius-large);
+    box-shadow: var(--filroden-shadow-card);
+}
+
 /* Helper text below inputs or headers */
-.rmu-combat-narrator .hint,
-.rmu-combat-narrator .rmu-combat-narrator-notes {
+.rmu-combat-storyboard .hint,
+.rmu-combat-storyboard .rmu-combat-storyboard-notes {
     font-size: var(--filroden-font-size-xs);
     color: var(--filroden-color-text-muted-solid);
     margin-block-start: var(--filroden-space-xxs);
@@ -361,7 +370,7 @@
 }
 
 /* Empty or missing data states */
-.rmu-combat-narrator .rmu-combat-narrator-empty {
+.rmu-combat-storyboard .rmu-combat-storyboard-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -376,7 +385,7 @@
 }
 
 /* Thematic Divider */
-.rmu-combat-narrator .rmu-combat-narrator-divider {
+.rmu-combat-storyboard .rmu-combat-storyboard-divider {
     border: none;
     height: 1px;
     width: 100%;
@@ -386,33 +395,73 @@
 
 
 /* --- BADGES & PILLS --- */
-.rmu-combat-narrator .rmu-combat-narrator-badge {
+.rmu-combat-storyboard .rmu-combat-storyboard-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--filroden-space-xs);
-    background-color: var(--filroden-color-bg-darkest);
-    color: var(--filroden-color-text-muted-solid);
+    background-color: var(--filroden-color-text-muted-solid);
+    color: var(--filroden-color-bg-darkest);
     border: 1px solid var(--filroden-color-border);
     border-radius: var(--filroden-radius-large);
-    font-size: var(--filroden-font-size-xs);
+    font-size: var(--filroden-font-size-m);
     font-weight: bold;
     padding: var(--filroden-space-xxs) var(--filroden-space-s);
+    margin-block-end: var(--filroden-space-s);
     line-height: var(--filroden-line-height-heading);
     white-space: nowrap;
 }
 
-.rmu-combat-narrator .rmu-combat-narrator-badge.primary {
+.rmu-combat-storyboard .rmu-combat-storyboard-badge.primary {
     background-color: var(--filroden-color-text-accent);
     color: var(--filroden-color-text-on-accent);
     border-color: var(--filroden-color-text-accent);
+}
+
+/* Specific margin bump for stage layout zone listings */
+.rmu-combat-storyboard .rmu-combat-storyboard-notes.stage-layout-notes {
+    margin-block-start: var(--filroden-space-xs);
+}
+
+/* Forces elements like zone actors onto their own visual lines */
+.rmu-combat-storyboard .rmu-combat-storyboard-zone-row {
+    display: block;
+}
+
+/* Emphasizes action results (hits, misses, successes) */
+.rmu-combat-storyboard .rmu-combat-storyboard-event-result {
+    color: var(--filroden-color-text-accent);
+    font-weight: bold;
+    font-size: var(--filroden-font-size-xs);
+    margin-inline-start: var(--filroden-space-xxs);
+}
+
+/* Tightens the spacing for nested UI lists (Impacts/Saves) */
+.rmu-combat-storyboard .rmu-combat-storyboard-list {
+    margin-block: var(--filroden-space-xxs) 0;
+    padding-inline-start: var(--filroden-space-l);
+    list-style-type: disc;
+}
+
+.rmu-combat-storyboard .rmu-combat-storyboard-list li {
+    margin-block-end: var(--filroden-space-xxs);
+}
+
+/* Creates breathing room between multiple combat zones */
+.rmu-combat-storyboard .rmu-combat-storyboard-zone-group {
+    margin-block-start: var(--filroden-space-s);
+}
+
+/* Prevents double-margin at the top of the zone list */
+.rmu-combat-storyboard .rmu-combat-storyboard-zone-group:first-child {
+    margin-block-start: 0;
 }
 
 /* ===================================================================
    --- COMBAT TRACKER SIDEBAR BUTTON ---
 =================================================================== */
 
-.combat-sidebar .rmu-narrator-nav-wrapper {
+.combat-sidebar .rmu-storyboard-nav-wrapper {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -421,13 +470,13 @@
 }
 
 /* Force Foundry's native element to fill the remaining space */
-.combat-sidebar .rmu-narrator-nav-wrapper > :not(.rmu-combat-narrator-sidebar-btn) {
+.combat-sidebar .rmu-storyboard-nav-wrapper > :not(.rmu-combat-storyboard-sidebar-btn) {
     flex: 1;
     margin: 0; /* Override any native margins that might break the flex row */
 }
 
 /* Make custom button a standard square */
-.rmu-combat-narrator-sidebar-btn {
+.rmu-combat-storyboard-sidebar-btn {
     flex: 0 0 36px; 
     display: flex;
     justify-content: center;
@@ -440,29 +489,30 @@
    --- MAIN UI ---
 =================================================================== */
 
-.rmu-combat-narrator {
+.rmu-combat-storyboard {
     font-family: var(--filroden-font-family) !important;
     font-size: var(--filroden-font-size-s);
     background: var(--filroden-color-bg-darkest) !important;
+    max-height: 70vh;
     --filroden-dir-flip: 1;
 }
 
 /* UI direction handling for RTL languages */
-.rmu-combat-narrator.rtl,
-.rmu-combat-narrator[dir="rtl"] {
+.rmu-combat-storyboard.rtl,
+.rmu-combat-storyboard[dir="rtl"] {
     --filroden-dir-flip: -1;
 }
 
-:root:lang(ar) #tooltip.rmu-combat-narrator-tooltip,
-:root:lang(he) #tooltip.rmu-combat-narrator-tooltip,
-:root:lang(fa) #tooltip.rmu-combat-narrator-tooltip,
-:root:lang(ur) #tooltip.rmu-combat-narrator-tooltip {
+:root:lang(ar) #tooltip.rmu-combat-storyboard-tooltip,
+:root:lang(he) #tooltip.rmu-combat-storyboard-tooltip,
+:root:lang(fa) #tooltip.rmu-combat-storyboard-tooltip,
+:root:lang(ur) #tooltip.rmu-combat-storyboard-tooltip {
     direction: rtl;
     text-align: right;
 }
 
 /* Main window header styles */
-.rmu-combat-narrator .window-header {
+.rmu-combat-storyboard .window-header {
     background: var(--filroden-color-bg-darkest) !important;
     border: none !important;
     color: var(--filroden-color-text-main-solid);
@@ -474,7 +524,7 @@
     align-items: center;
 }
 
-.rmu-combat-narrator .window-header .window-title {
+.rmu-combat-storyboard .window-header .window-title {
     font-size: var(--filroden-font-size-s);
     line-height: var(--filroden-line-height-heading);
     text-align: start; 
@@ -483,62 +533,109 @@
     flex: 1;
 }
 
-.rmu-combat-narrator .window-header .window-icon {
+.rmu-combat-storyboard .window-header .window-icon {
     margin-inline-start: var(--filroden-space-xxs);
     margin-inline-end: 0;
 }
 
 /* Main window content styles */
-.rmu-combat-narrator .window-content {
+.rmu-combat-storyboard .window-content {
     background: var(--filroden-color-bg-darkest) !important;
     color: var(--filroden-color-text-main-solid);
     padding: 0;
     overflow: hidden;
 }
 
-.rmu-combat-narrator .rmu-combat-narrator-main-container {
+.rmu-combat-storyboard .rmu-combat-storyboard-main-container {
     flex: 1; /* Take up remaining space */
     position: relative; /* Contain the absolutely positioned active tabs */
     min-height: 200px; /* Give it some minimum breathing room */
-    max-height: 70vh; /* Sensible maximum height relative to the user's monitor */
     display: flex;
     flex-direction: column;
 }
 
 /* --- WIZARD TABS --- */
-.rmu-combat-narrator [data-tab="timeline"] .form-group {
+.rmu-combat-storyboard [data-tab="timeline"] .form-group {
     grid-template-columns: minmax(0, 1fr) max-content;
     align-items: start; 
 }
 
-.rmu-combat-narrator .event-controls {
+.rmu-combat-storyboard .event-controls {
     display: flex;
     align-items: center;
     gap: var(--filroden-space-s);
     margin-block-start: -0.25rem; 
 }
 
-.rmu-combat-narrator .event-controls label {
+.rmu-combat-storyboard .event-controls label {
     margin: 0;
     cursor: pointer;
 }
 
-.rmu-combat-narrator .form-group.stacked {
+.rmu-combat-storyboard .form-group.stacked {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: var(--filroden-space-xs);
 }
 
-.rmu-combat-narrator .form-group.stacked textarea {
+.rmu-combat-storyboard .form-group.stacked textarea {
     width: 100%;
     resize: vertical;
 }
 
 /* Force helper text to span the full grid width, protecting column ratios */
-.rmu-combat-narrator .form-group .hint,
-.rmu-combat-narrator .form-group .notes,
-.rmu-combat-narrator .form-group p.notes {
+.rmu-combat-storyboard .form-group .hint,
+.rmu-combat-storyboard .form-group .notes,
+.rmu-combat-storyboard .form-group p.notes {
     grid-column: 1 / -1;
     margin-block-start: 0; /* Tighten up the gap since it's on a new row */
+}
+
+/* --- FIXED FOOTER TAB LAYOUT --- */
+/* Prevents the main container from scrolling so the footer stays pinned */
+.rmu-combat-storyboard .rmu-combat-storyboard-main.rmu-combat-storyboard-tab-fixed-footer {
+    overflow-y: hidden; 
+    padding: 0; /* Remove default padding so the custom scrollbar hits the right edge */
+}
+
+/* The new internal scrolling area */
+.rmu-combat-storyboard .rmu-combat-storyboard-scroll-area {
+    flex: 1; /* Pushes the footer down and takes up remaining space */
+    overflow-y: auto;
+    padding: var(--filroden-space-l);
+}
+
+/* The pinned footer */
+.rmu-combat-storyboard .rmu-combat-storyboard-timeline-footer {
+    flex: 0 0 auto; /* Forces the footer to its natural height and prevents shrinking */
+    display: flex;
+    justify-content: flex-end; /* Pushes the download button to the right */
+    align-items: center;
+    padding: var(--filroden-space-m) var(--filroden-space-l);
+    background: var(--filroden-color-bg-darkest);
+    border-block-start: 1px solid var(--filroden-color-border);
+    margin: 0; 
+}
+
+.rmu-combat-storyboard .rmu-combat-storyboard-timeline-footer button {
+    width: 100%;
+}
+
+/* Styling for the GM instructions block on the Export tab */
+.rmu-combat-storyboard .rmu-combat-storyboard-instructions {
+    background-color: var(--filroden-color-bg-light);
+    border: var(--filroden-border-dashed);
+    border-radius: var(--filroden-radius-medium);
+    padding: var(--filroden-space-m);
+    margin-block-start: var(--filroden-space-l);
+}
+
+.rmu-combat-storyboard .rmu-combat-storyboard-instructions li {
+    color: var(--filroden-color-text-muted-solid);
+    line-height: var(--filroden-line-height-body);
+}
+
+.rmu-combat-storyboard .rmu-combat-storyboard-instructions strong {
+    color: var(--filroden-color-text-main-solid);
 }

@@ -100,16 +100,36 @@ function _categorizeUnengagedToken(token, allTokens) {
 }
 
 /**
- * Appends elevation data to a token's name if they are not on the ground level.
+ * Appends elevation data and active spatial statuses to a token's name.
  */
 function _formatActorName(token) {
-    const elevation = token.document.elevation;
-    if (!elevation) return token.name;
+    const elevation = token.document.elevation || 0;
+
+    // Fetch active status effects from the actor
+    const statuses = token.actor?.statuses || new Set();
+
+    const isFlying = statuses.has("fly");
+    const isHovering = statuses.has("hover");
+    const isBurrowing = statuses.has("burrow");
+
+    let locomotion = "";
+    if (isFlying) locomotion = "Flying";
+    else if (isHovering) locomotion = "Hovering";
+    else if (isBurrowing) locomotion = "Burrowing";
+
+    // If they are on the ground and doing nothing special, return just the name
+    if (elevation === 0 && !locomotion) return token.name;
 
     const units = canvas.scene?.grid?.units || "ft";
-    const verticalState = elevation > 0 ? "Elevated" : "Subterranean";
 
-    return `${token.name} (${verticalState} ${Math.abs(elevation)}${units})`;
+    if (elevation !== 0) {
+        // Replace the generic "Elevated" with the specific locomotion state if they have one
+        const verticalState = locomotion || (elevation > 0 ? "Elevated" : "Subterranean");
+        return `${token.name} (${verticalState} ${Math.abs(elevation)}${units})`;
+    }
+
+    // They are at elevation 0, but have a status (e.g., hovering an inch off the floor)
+    return `${token.name} (${locomotion})`;
 }
 
 /**

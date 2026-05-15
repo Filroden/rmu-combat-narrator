@@ -4,10 +4,10 @@ let _eventQueue = [];
 let _queueTimer = null;
 
 /**
- * Safely writes a new narrator event to the active combat document using a debounce queue.
+ * Safely writes a new storyboard event to the active combat document using a debounce queue.
  */
-export function persistEventToCombat(narratorEvent) {
-    _eventQueue.push(narratorEvent);
+export function persistEventToCombat(storyboardEvent) {
+    _eventQueue.push(storyboardEvent);
 
     if (_queueTimer) clearTimeout(_queueTimer);
 
@@ -21,17 +21,17 @@ async function _processEventQueue() {
     const pendingEvents = [..._eventQueue];
     _eventQueue = [];
 
-    const currentLog = combat.getFlag("rmu-combat-narrator", "eventLog") || [];
+    const currentLog = combat.getFlag("rmu-combat-storyboard", "eventLog") || [];
     const updatedLog = currentLog.concat(pendingEvents);
 
-    await combat.setFlag("rmu-combat-narrator", "eventLog", updatedLog);
+    await combat.setFlag("rmu-combat-storyboard", "eventLog", updatedLog);
 }
 
 /**
  * Creates a persistent JournalEntry inside a dedicated folder to store the event log.
  */
 export async function createJournalLog(eventLog, roster) {
-    const folderName = game.i18n.localize("RMU_NARRATOR.Dialogs.FolderName");
+    const folderName = game.i18n.localize("RMU_STORYBOARD.Dialogs.FolderName");
     let folder = game.folders.find((f) => f.type === "JournalEntry" && f.name === folderName);
 
     if (!folder) {
@@ -50,18 +50,18 @@ export async function createJournalLog(eventLog, roster) {
         folder: folder.id,
         pages: [
             {
-                name: game.i18n.localize("RMU_NARRATOR.Dialogs.JournalPageName"),
+                name: game.i18n.localize("RMU_STORYBOARD.Dialogs.JournalPageName"),
                 type: "text",
-                text: { content: game.i18n.localize("RMU_NARRATOR.Dialogs.JournalPageText") },
+                text: { content: game.i18n.localize("RMU_STORYBOARD.Dialogs.JournalPageText") },
             },
         ],
         flags: {
-            "rmu-combat-narrator": {
+            "rmu-combat-storyboard": {
                 eventLog: eventLog,
                 roster: roster,
             },
         },
     });
 
-    ui.notifications.info(game.i18n.localize("RMU_NARRATOR.Wizard.Notifications.LogSaved"));
+    ui.notifications.info(game.i18n.localize("RMU_STORYBOARD.Wizard.Notifications.LogSaved"));
 }

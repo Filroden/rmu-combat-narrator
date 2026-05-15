@@ -9,7 +9,7 @@ export function extractCombatRoster(combat) {
 
             return {
                 id: c.token?.id || c.id,
-                name: c.name,
+                name: c.token?.name || c.name,
                 descriptor: _buildActorDescriptor(actor),
             };
         })
@@ -18,8 +18,8 @@ export function extractCombatRoster(combat) {
     // Inject the Scene as a permanent cast member so the GM can visually describe it
     roster.push({
         id: "aog",
-        name: "Environment",
-        descriptor: "Various environmental hazards, falling, traps, etc.", // The GM can overwrite this in the UI
+        name: game.i18n.localize("RMU_NARRATOR.Wizard.Roster.EnvironmentName"),
+        descriptor: game.i18n.localize("RMU_NARRATOR.Wizard.Roster.EnvironmentDescriptor"),
     });
 
     return roster;

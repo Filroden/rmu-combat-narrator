@@ -1,7 +1,7 @@
 /**
  * Injects the module's launch button into the native Foundry Combat Tracker.
  */
-import { RMUNarratorWizard } from "./wizard.js";
+import { RMUstoryboardWizard } from "./wizard.js";
 
 export function registerSidebarInjection() {
     Hooks.on("renderCombatTracker", injectSidebarButton);
@@ -18,13 +18,13 @@ function injectSidebarButton(app, html) {
     if (!encountersNav) return;
 
     // Prevent duplicate injections during partial re-renders
-    if (encountersNav.querySelector(".rmu-combat-narrator-sidebar-btn")) return;
+    if (encountersNav.querySelector(".rmu-combat-storyboard-sidebar-btn")) return;
 
     const button = createWizardButton();
 
     // Create a safe flex wrapper to sit our button next to native elements
     const wrapper = document.createElement("div");
-    wrapper.className = "rmu-narrator-nav-wrapper";
+    wrapper.className = "rmu-storyboard-nav-wrapper";
 
     // Move existing native children (e.g., 'Create Encounter' or the dropdown) into our wrapper
     while (encountersNav.firstChild) {
@@ -38,12 +38,12 @@ function injectSidebarButton(app, html) {
 function createWizardButton() {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "rmu-combat-narrator-sidebar-btn";
+    button.className = "rmu-combat-storyboard-sidebar-btn";
 
-    button.dataset.tooltip = game.i18n.localize("RMU_NARRATOR.Title");
+    button.dataset.tooltip = game.i18n.localize("RMU_STORYBOARD.Title");
 
     const icon = document.createElement("i");
-    icon.className = "rmu-combat-narrator-icon wizard";
+    icon.className = "rmu-combat-storyboard-icon wizard";
     button.appendChild(icon);
 
     button.addEventListener("click", handleWizardButtonClick);
@@ -53,6 +53,6 @@ function createWizardButton() {
 
 function handleWizardButtonClick(event) {
     event.preventDefault();
-    const app = new RMUNarratorWizard();
+    const app = new RMUstoryboardWizard();
     app.render({ force: true });
 }

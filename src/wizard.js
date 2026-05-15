@@ -1,36 +1,36 @@
 /**
- * The core ApplicationV2 interface for the RMU Combat Narrator.
+ * The core ApplicationV2 interface for the RMU Combat Storyboard.
  */
-import { MOCK_ROSTER, MOCK_TIMELINE } from "./mock-data.js";
-import { compileDenseNotation } from "./compiler.js";
+import { compileDenseNotation, buildHumanReadableTimeline, compileHumanReadableLog } from "./compiler.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
-export class RMUNarratorWizard extends HandlebarsApplicationMixin(ApplicationV2) {
+export class RMUStoryboardWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     static DEFAULT_OPTIONS = {
-        id: "rmu-narrator-wizard",
-        classes: ["rmu-combat-narrator", "rmu-combat-narrator-window"],
+        id: "rmu-storyboard-wizard",
+        classes: ["rmu-combat-storyboard", "rmu-combat-storyboard-window"],
         tag: "form",
         window: {
-            title: "RMU_NARRATOR.Title",
-            icon: "rmu-combat-narrator-icon wizard",
+            title: "RMU_STORYBOARD.Title",
+            icon: "rmu-combat-storyboard-icon wizard",
             resizable: true,
         },
         position: { width: 700, height: "auto" },
-        template: "modules/rmu-combat-narrator/templates/wizard.hbs",
+        template: "modules/rmu-combat-storyboard/templates/wizard.hbs",
         actions: {
-            toggleHighlight: RMUNarratorWizard.#toggleHighlight,
-            changeTab: RMUNarratorWizard.#changeTab,
-            copyPrompt: RMUNarratorWizard.#copyPrompt,
+            toggleHighlight: RMUStoryboardWizard.#toggleHighlight,
+            changeTab: RMUStoryboardWizard.#changeTab,
+            copyPrompt: RMUStoryboardWizard.#copyPrompt,
+            downloadLog: RMUStoryboardWizard.#downloadLog,
         },
     };
 
     static PARTS = {
-        tabs: { template: "modules/rmu-combat-narrator/templates/parts/tabs.hbs" },
-        config: { template: "modules/rmu-combat-narrator/templates/parts/config.hbs" },
-        roster: { template: "modules/rmu-combat-narrator/templates/parts/roster.hbs" },
-        timeline: { template: "modules/rmu-combat-narrator/templates/parts/timeline.hbs" },
-        export: { template: "modules/rmu-combat-narrator/templates/parts/export.hbs" },
+        tabs: { template: "modules/rmu-combat-storyboard/templates/parts/tabs.hbs" },
+        config: { template: "modules/rmu-combat-storyboard/templates/parts/config.hbs" },
+        roster: { template: "modules/rmu-combat-storyboard/templates/parts/roster.hbs" },
+        timeline: { template: "modules/rmu-combat-storyboard/templates/parts/timeline.hbs" },
+        export: { template: "modules/rmu-combat-storyboard/templates/parts/export.hbs" },
     };
 
     /**
@@ -41,8 +41,8 @@ export class RMUNarratorWizard extends HandlebarsApplicationMixin(ApplicationV2)
         promptStyle: "text",
         artStyle: "gritty",
         selectedLogId: "",
-        roster: foundry.utils.deepClone(MOCK_ROSTER),
-        timeline: foundry.utils.deepClone(MOCK_TIMELINE),
+        roster: [],
+        timeline: [],
         pageTarget: 3,
         campaignContext: "",
     };
@@ -51,10 +51,15 @@ export class RMUNarratorWizard extends HandlebarsApplicationMixin(ApplicationV2)
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
 
-        // Query all journals containing specific module flag
-        const availableLogs = game.journal.filter((j) => j.getFlag("rmu-combat-narrator", "eventLog")).map((j) => ({ id: j.id, name: j.name }));
+        const availableLogs = game.journal
+            .filter((j) => j.getFlag("rmu-combat-storyboard", "eventLog"))
+            .map((j) => ({ id: j.id, name: j.name }))
+            .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
 
-        const groupedTimeline = this.#groupTimelineByRound(this.#state.timeline);
+        // 2. Consume the translated timeline for the UI, leaving the LLM state untouched
+        const hrTimeline = buildHumanReadableTimeline(this.#state.timeline);
+        const groupedTimeline = this.#groupTimelineByRound(hrTimeline);
+
         const compiledPrompt = compileDenseNotation(this.#state);
 
         return {
@@ -95,7 +100,7 @@ export class RMUNarratorWizard extends HandlebarsApplicationMixin(ApplicationV2)
         // Guard Clause: Only block if they are trying to add a new highlight
         // and they have already hit the limit.
         if (!isCurrentlySelected && this.#hasReachedSelectionLimit()) {
-            ui.notifications.warn(game.i18n.localize("RMU_NARRATOR.Wizard.Notifications.LimitReached"));
+            ui.notifications.warn(game.i18n.localize("RMU_STORYBOARD.Wizard.Notifications.LimitReached"));
 
             // The DOM checkbox ticked natively before this action caught it.
             // Force the visual state back to match blocked data state.
@@ -139,15 +144,15 @@ export class RMUNarratorWizard extends HandlebarsApplicationMixin(ApplicationV2)
 
         try {
             await navigator.clipboard.writeText(textarea.value);
-            ui.notifications.info(game.i18n.localize("RMU_NARRATOR.Wizard.Notifications.Copied"));
+            ui.notifications.info(game.i18n.localize("RMU_STORYBOARD.Wizard.Notifications.Copied"));
         } catch (err) {
-            ui.notifications.error(game.i18n.localize("RMU_NARRATOR.Wizard.Notifications.CopyFailed"));
-            console.error("RMU Combat Narrator | Clipboard write failed:", err);
+            ui.notifications.error(game.i18n.localize("RMU_STORYBOARD.Wizard.Notifications.CopyFailed"));
+            console.error("RMU Combat Storyboard | Clipboard write failed:", err);
         }
     }
 
     /** @override */
-    _onChangeForm(formConfig, event) {
+    async _onChangeForm(formConfig, event) {
         const target = event.target;
         const name = target.name;
 
@@ -164,27 +169,55 @@ export class RMUNarratorWizard extends HandlebarsApplicationMixin(ApplicationV2)
             const actorId = name.split(".")[1];
             const actor = this.#state.roster.find((a) => a.id === actorId);
             if (actor) actor.descriptor = target.value;
-            return;
+        } else {
+            // Handle root configuration updates
+            this.#state[name] = target.value;
         }
 
-        // Handle root configuration updates
-        this.#state[name] = target.value;
+        // Auto-save edited context and roster back to the active journal
+        const activeJournal = game.journal.get(this.#state.selectedLogId);
+        if (activeJournal) {
+            await activeJournal.setFlag("rmu-combat-storyboard", "roster", this.#state.roster);
+            await activeJournal.setFlag("rmu-combat-storyboard", "campaignContext", this.#state.campaignContext);
+        }
     }
 
     /**
-     * Replaces the active timeline and roster with the selected journal log.
+     * Replaces the active timeline, roster, and context with the selected journal log.
      */
     #loadLogFromJournal(journalId) {
         const journal = game.journal.get(journalId);
         if (!journal) return;
 
-        const savedLog = journal.getFlag("rmu-combat-narrator", "eventLog") || [];
-        const savedRoster = journal.getFlag("rmu-combat-narrator", "roster") || [];
+        const savedLog = journal.getFlag("rmu-combat-storyboard", "eventLog") || [];
+        const savedRoster = journal.getFlag("rmu-combat-storyboard", "roster") || [];
+        const savedContext = journal.getFlag("rmu-combat-storyboard", "campaignContext") || "";
 
         this.#state.timeline = savedLog;
         this.#state.roster = savedRoster;
+        this.#state.campaignContext = savedContext;
         this.#state.selectedLogId = journalId;
 
         this.render({ force: true });
+    }
+
+    /**
+     * Action handler to generate and download a plain text readable combat log.
+     */
+    static async #downloadLog(event, target) {
+        const textContent = compileHumanReadableLog(this.#state);
+
+        // Generate a downloadable Blob natively in the browser
+        const blob = new Blob([textContent], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `RMU_Combat_Log_${new Date().toISOString().split("T")[0]}.txt`;
+        a.click();
+
+        URL.revokeObjectURL(url);
+
+        ui.notifications.info(game.i18n.localize("RMU_STORYBOARD.Wizard.Notifications.Downloaded"));
     }
 }

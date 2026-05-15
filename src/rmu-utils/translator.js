@@ -9,6 +9,7 @@ export function translateAttackData(attackData) {
 
     return {
         id: foundry.utils.randomID(),
+        linkedChatId: attackData.action?.chatId || null,
         type: "combatAction",
         round: _calculateRoundPhase(),
         source: attacker,
@@ -17,8 +18,8 @@ export function translateAttackData(attackData) {
         weapon: attackData.action?.attackName || "Unknown Weapon",
         flair: _mapFlair(attackData.statuses),
         result: _sanitizeResult(attackData.attackResult, attackData.statuses),
-        effect: _mapEffects(attackData.effects, attackData.criticals),
-        systemNarrative: _buildNarrative(attackData.location, attackData.effects, attackData.statuses),
+        effect: _mapEffects([], attackData.criticals),
+        systemNarrative: _buildNarrative(attackData.location, [], attackData.statuses),
         isHighlighted: false,
     };
 }
@@ -91,13 +92,21 @@ function _extractCriticals(criticals) {
         .filter(Boolean);
 }
 
+/**
+ * Extracts numeric values from mechanical effects.
+ * Handles primitive integers for 'rounds' natively.
+ */
 function _extractMechanicalEffects(effects) {
     if (!Array.isArray(effects)) return [];
 
     const visualEffects = effects.filter((e) => e.effect && !["Hits", "Attack Hits"].includes(e.effect));
 
     return visualEffects.map((e) => {
-        const val = e.value || e.rounds?.[0] || e.count || "";
+        // Evaluate value, count, or rounds (handling both arrays and primitive numbers)
+        let val = e.value || e.count || "";
+        if (!val && e.rounds !== undefined) {
+            val = Array.isArray(e.rounds) ? e.rounds[0] : e.rounds;
+        }
         return val ? `${e.effect} ${val}` : e.effect;
     });
 }
@@ -139,6 +148,7 @@ export function translateSpellData(spellData) {
 
     return {
         id: foundry.utils.randomID(),
+        linkedChatId: spellData.action?.chatId || null, // Capture the relational ID
         type: "combatAction",
         round: _calculateRoundPhase(),
         source: attacker,
@@ -170,4 +180,93 @@ function _sanitizeSpellResult(statuses) {
     if (statuses.includes("Utility")) result.push("(Utility)");
 
     return result.join(" ");
+}
+
+/**
+ * Translates the raw RMU Resistance Roll (RR) payload into our Dense Notation schema.
+ */
+export function translateResistanceRollData(rrData) {
+    // Catch both singular and plural keys to prevent "Unknown Target"
+    const defId = rrData.defenderTokenId || rrData.defenderTokenIds;
+    // Handle array or string returns safely
+    const defenderId = Array.isArray(defId) ? defId[0] : defId;
+    const defender = canvas.tokens.get(defenderId)?.name || "Unknown Target";
+
+    const attId = rrData.attackerTokenId || rrData.attackerTokenIds;
+    const attackerId = Array.isArray(attId) ? attId[0] : attId;
+    const attacker = canvas.tokens.get(attackerId)?.name || "Unknown Caster";
+
+    const realm = rrData.realm || "Magic";
+
+    // Guard Clause: Only apply mechanical effects and their narratives if the target actually failed the save
+    const isFailure = Array.isArray(rrData.statuses) && rrData.statuses.includes("Resistance Failure");
+    const validEffects = isFailure ? rrData.effects : [];
+
+    return {
+        id: foundry.utils.randomID(),
+        linkedChatId: rrData.action?.chatId || null,
+        type: "combatAction",
+        round: _calculateRoundPhase(),
+        source: defender,
+        target: attacker,
+        actionType: "->",
+        weapon: `${realm} Resistance`,
+        flair: _mapFlair(rrData.statuses),
+        result: _sanitizeResistanceResult(rrData.statuses),
+        // Map the effects using our existing pipeline
+        effect: _mapEffects(validEffects, []),
+        systemNarrative: _buildRRNarrative(rrData.location),
+        isHighlighted: false,
+    };
+}
+
+/**
+ * Extracts the core resistance resolution.
+ */
+function _sanitizeResistanceResult(statuses) {
+    if (!Array.isArray(statuses)) return "";
+
+    if (statuses.includes("Resistance Success")) return "Resisted";
+    if (statuses.includes("Resistance Failure")) return "Failed to Resist";
+
+    return "";
+}
+
+/**
+ * Formats any specific location targeting associated with the resistance phase.
+ */
+function _buildRRNarrative(location) {
+    if (!location?.location) return "";
+
+    const side = location.side ? `${location.side} ` : "";
+    return `Spell targets ${side}${location.location}.`.trim();
+}
+
+/**
+ * Translates the final applied damage and effects.
+ */
+export function translateApplyDamageData(damageData) {
+    const defender = canvas.tokens.get(damageData.defenderTokenId)?.name || "Unknown Defender";
+    const attacker = canvas.tokens.get(damageData.attackerTokenId)?.name || "Unknown Attacker";
+
+    return {
+        id: foundry.utils.randomID(),
+        linkedChatId: damageData.action?.chatId || null,
+        type: "combatAction",
+        isDamageEvent: true, // Flag to tell the Sieve how to fold this
+        round: _calculateRoundPhase(),
+        source: attacker,
+        target: defender,
+        flair: _mapFlair(damageData.statuses),
+        effect: _mapEffects(damageData.effects, []),
+        systemNarrative: _buildDamageNarrative(damageData.effects),
+    };
+}
+
+/**
+ * Formats specific narrative strings purely from the applied effects.
+ */
+function _buildDamageNarrative(effects) {
+    const validDescriptions = Array.isArray(effects) ? [...new Set(effects.map((e) => e.description).filter(Boolean))] : [];
+    return validDescriptions.join(" ").trim();
 }
