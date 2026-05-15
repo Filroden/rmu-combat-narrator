@@ -1,7 +1,7 @@
 /**
  * Injects the module's launch button into the native Foundry Combat Tracker.
  */
-import { RMUstoryboardWizard } from "./wizard.js";
+import { RMUStoryboardWizard } from "./wizard.js";
 
 export function registerSidebarInjection() {
     Hooks.on("renderCombatTracker", injectSidebarButton);
@@ -53,6 +53,6 @@ function createWizardButton() {
 
 function handleWizardButtonClick(event) {
     event.preventDefault();
-    const app = new RMUstoryboardWizard();
+    const app = new RMUStoryboardWizard();
     app.render({ force: true });
 }

@@ -18,8 +18,8 @@ export function extractCombatRoster(combat) {
     // Inject the Scene as a permanent cast member so the GM can visually describe it
     roster.push({
         id: "aog",
-        name: game.i18n.localize("RMU_NARRATOR.Wizard.Roster.EnvironmentName"),
-        descriptor: game.i18n.localize("RMU_NARRATOR.Wizard.Roster.EnvironmentDescriptor"),
+        name: game.i18n.localize("RMU_STORYBOARD.Wizard.Roster.EnvironmentName"),
+        descriptor: game.i18n.localize("RMU_STORYBOARD.Wizard.Roster.EnvironmentDescriptor"),
     });
 
     return roster;
