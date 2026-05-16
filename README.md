@@ -30,29 +30,38 @@ The result? Raw combat logs are transformed into cinematic, multi-page comic boo
 1. **Run Your Combat:** Play out your RMU encounter normally. When the combat ends, you (GMs only) will be prompted to save the raw event log to a Journal Entry.
 2. **Open the Wizard:** Click the Storyboard Wizard icon (the crossed swords) located at the top of the Combat Tracker sidebar.
 3. **Configuration Tab:** * Select your saved combat log from the dropdown menu.
-    - Choose your **Prompt Style** (Script Only, or Script & Image Prompts).
     - Choose an **Art Style** (e.g., Dark & Gritty, 1980s Retro, Manga).
     - Set a **Target Page Count** to dictate the length of the final comic.
     - Provide a brief **Campaign Context** (e.g., "A rainy night in a muddy forest clearing") to ground the AI.
-4. **Cast & Roster Tab:** Review the combatants. Replace their mechanical names with physical descriptions (e.g., "A small halfling wearing soft leather"). This prevents the image generator from hallucinating character names as floating text.
+4. **Cast & Roster Tab:** Review the combatants. Replace their mechanical names with physical descriptions (e.g., "A small halfling wearing soft leather"). This allows the AI to visualise the combatants better.
+
+   > **Note**:  If the combatant is a fantastical or unusual creature or race, you should provide a short description, e.g., "A medium sibbicai ranger. Sibbicai have the head of a jackal on humanoid shaped bodies. Their skin is covered in smooth, oily black short hair coats."
+
 5. **Highlight Reel Tab:** Review the timeline of the battle. Check the **Hero Moment** box next to the most important actions to guarantee they receive a massive spotlight panel in the final script. You can also download a human-readable text file of the log from here.
+
+   > **Note**: Use the **Hero Moment** boxes sparingly to avoid confusing the AI. Ideally, you should select one hero moment for each page and avoid choosing them too close together in the sequence of events.
+
 6. **Export Prompt Tab:** The module compiles your entire curated battle into a dense, token-optimised code block. Click **Copy to Clipboard**.
 
 ## How to use (external LLM workflow)
 
 Because modern AI models perform best when their attention isn't split, this module separates the roles of the **Writer** (generating the story) and the **Artist** (generating the images).
 
-### Step 1: Generate the script
+### Step 1: Generate the script and image prompts
 
-Paste the copied prompt from the "Export Prompt" tab into your preferred text-based LLM (such as ChatGPT, Gemini, or Claude).
+Paste the copied prompt from the "Export Prompt" tab into your preferred text-based LLM AI (such as ChatGPT, Gemini, or Claude).
 
-The LLM will process the dense mechanical notation, follow the layout rules included by the module, and output a formatted comic book script for you to read, complete with camera angles and sound effects.
+The AI will process the dense mechanical notation, follow the layout rules included by the module, and output a formatted comic book script for you to read, complete with camera angles and sound effects.
 
-### Step 2: Generate the art (optional)
+### Step 2: Generate the art using an AI image-generation model
 
-If you selected the **Script & Image Prompts** option, your LLM will also output self-contained code blocks labeled `Image Prompt: Page X`.
+The AI will also generate image prompts inside code block labeled `Image Prompt: Page X` for each page.
 
 Copy these blocks *one by one* and paste them back into an image-generation model (like ChatGPT Plus/DALL-E 3, Gemini Pro, or Midjourney). The prompt has already been sanitised of game mechanics and character names, forcing the image model to strictly draw the visual action in your chosen art style.
+
+### Step 3: Consider commissioning hand-drawn images
+
+If the combat was truly epic, consider commissioning hand-drawn images. The FoundryVTT Discord has an `#artist-commissions` channel here: [FoundryVTT #Artist Commissions](https://discord.com/channels/170995199584108546/1154878920412373052). There are many other websites where you can find artists willing to create images for you.
 
 ## Important note on localisation
 

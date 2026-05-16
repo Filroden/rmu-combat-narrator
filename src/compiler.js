@@ -48,14 +48,10 @@ The combat timeline uses the following shorthand:
 3. Literal Translation: Do not pass game mechanics to the image generator. Translate concepts like 'Scene (Falling)' or 'Breakage' into literal, physical phenomena (e.g., crumbling cliff edges, snapping wood).
 4. Focal Hierarchy (Anti-Bleed): To prevent entity hallucination, limit the prompt to a maximum of TWO highly detailed characters per panel (usually the attacker and primary target). For mass brawls or area attacks, render additional combatants purely as shadowy silhouettes, blurred foreground elements, or atmospheric background shapes.
 5. Character Continuity: Use the Cast List for strict visual reference.
-6. No Text Rule (Prompt Sanitization): Image generators will hallucinate proper nouns as floating text. You MUST completely strip all character names (e.g., "Felt", "Risato") and notation tags from the Image Prompt section. Replace character names with their physical descriptors from the Cast List (e.g., "a small halfling fighter"). The final prompt must describe purely visual elements.`;
+6. No Text Rule (Prompt Sanitization): Image generators will hallucinate proper nouns as floating text. You MUST completely strip all character names (e.g., "Felt", "Risato") from the Image Prompt section. Replace character names with their physical descriptors from the Cast List (e.g., "a small halfling fighter"). The final prompt must describe purely visual elements.`;
 
-    const formatMap = {
-        text: `[Output Format]
-Write a highly visual comic book script for the GM to read.
-Format each scene transition with: Size/Camera (e.g., [Wide Shot], [Extreme Close-Up]), followed by the Visual Description, and optionally a short Atmospheric Caption or a visceral SFX (included in the text script only). Do NOT use the word 'Panel' or write panel numbers. Do not include dialogue bubbles.`,
-
-        image: `[Output Format]
+    // Hardwire the dual Script + Image format
+    const outputFormat = `[Output Format]
 For EVERY page, you must output exactly two sections:
 
 **Script: Page X**
@@ -68,12 +64,9 @@ ${resolvedArtStyle}, multi-panel comic page, dynamic overlapping gutters, elemen
 CRITICAL RULES: Do NOT draw any text, speech bubbles, sound effects, or panel numbers. Use strictly visual storytelling.
 \`\`\`
 
-${sharedImageRules}`,
-    };
+${sharedImageRules}`;
 
-    const formatPrompt = formatMap[state.promptStyle] || formatMap["text"];
-
-    return `${baseDirectives}\n\n${formatPrompt}`;
+    return `${baseDirectives}\n\n${outputFormat}`;
 }
 
 function _compileContext(context) {
@@ -340,70 +333,103 @@ function _translateFlair(flairStr) {
  */
 export function compileHumanReadableLog(state) {
     const hrTimeline = buildHumanReadableTimeline(state.timeline);
-    const lines = [];
-
-    // Group by round natively
-    const rounds = hrTimeline.reduce((acc, e) => {
-        const r = Math.floor(e.round);
-        if (!acc[r]) acc[r] = [];
-        acc[r].push(e);
-        return acc;
-    }, {});
-
-    lines.push(`--- ${game.i18n.localize("RMU_STORYBOARD.Wizard.Log.Header")} ---\n`);
+    const rounds = _groupEventsByRound(hrTimeline);
+    const lines = [`--- ${game.i18n.localize("RMU_STORYBOARD.Wizard.Log.Header")} ---\n`];
 
     for (const [round, events] of Object.entries(rounds)) {
         lines.push(`== ${game.i18n.format("RMU_STORYBOARD.Wizard.Log.Round", { round })} ==`);
 
         for (const event of events) {
-            if (event.type === "stageLayout") {
-                lines.push(`[${game.i18n.localize("RMU_STORYBOARD.Wizard.Log.PositionsUpdated")}]`);
-                event.zones.forEach((z) => lines.push(` - ${z.name}: ${z.actors.join(", ")}`));
-            } else {
-                const hero = event.isHighlighted ? `★ ${game.i18n.localize("RMU_STORYBOARD.Wizard.Log.HeroMoment")}: ` : "";
-                const using = game.i18n.localize("RMU_STORYBOARD.Wizard.Log.Using");
-
-                // Only show parent results if it's NOT an AoE (AoE details belong strictly in the Impacts list)
-                let result = "";
-                if (!event.isAoE && event.result) {
-                    const flair = event.flair ? `${event.flair} ` : "";
-                    const effect = event.effect ? ` (${event.effect})` : "";
-                    result = ` - ${flair}${event.result}${effect}`;
-                }
-
-                // Dynamically prefix the generic spell narrative if the event provoked saves
-                let narrative = event.systemNarrative ? ` ${event.systemNarrative}` : "";
-                if (event.resistances && event.resistances.length > 0 && event.systemNarrative) {
-                    const failPrefix = game.i18n.localize("RMU_STORYBOARD.Wizard.Log.OnResistanceFail");
-                    narrative = ` [${failPrefix}: ${event.systemNarrative}]`;
-                }
-
-                // Main action line
-                lines.push(`${hero}${event.source} ${event.actionType} ${event.target} ${using} [${event.weapon}]${result}${narrative}`);
-
-                // Child impacts
-                if (event.isAoE && event.aoeTargets) {
-                    event.aoeTargets.forEach((t) => {
-                        const tFlair = t.flair ? `${t.flair} ` : "";
-                        const tEffect = t.effect ? ` (${t.effect})` : "";
-                        const tNarrative = t.systemNarrative ? ` ${t.systemNarrative}` : "";
-                        lines.push(`   > ${game.i18n.localize("RMU_STORYBOARD.Wizard.Log.Impact")} (${t.target}): ${tFlair}${t.result}${tEffect} ${tNarrative}`.trim());
-                    });
-                }
-
-                // Child saves
-                if (event.resistances && event.resistances.length > 0) {
-                    event.resistances.forEach((r) => {
-                        const rFlair = r.flair ? `${r.flair} ` : "";
-                        const rEffect = r.effect ? ` (${r.effect})` : "";
-                        const rNarrative = r.systemNarrative ? ` ${r.systemNarrative}` : "";
-                        lines.push(`   > ${game.i18n.localize("RMU_STORYBOARD.Wizard.Log.Save")} (${r.source}): ${rFlair}${r.result}${rEffect} ${rNarrative}`.trim());
-                    });
-                }
-            }
+            lines.push(..._compileHumanReadableEvent(event));
         }
+
         lines.push(""); // Empty line between rounds
     }
 
     return lines.join("\n").trim();
+}
+
+/**
+ * Helper: Groups a flat timeline array into an object keyed by round integer.
+ */
+function _groupEventsByRound(timeline) {
+    return timeline.reduce((acc, event) => {
+        const roundNum = Math.floor(event.round);
+        if (!acc[roundNum]) acc[roundNum] = [];
+        acc[roundNum].push(event);
+        return acc;
+    }, {});
+}
+
+/**
+ * Helper: Routes the event to the correct formatting logic based on its type.
+ */
+function _compileHumanReadableEvent(event) {
+    if (event.type === "stageLayout") {
+        return _compileHumanReadableStageLayout(event);
+    }
+    return _compileHumanReadableCombatAction(event);
+}
+
+/**
+ * Helper: Formats spatial layout updates.
+ */
+function _compileHumanReadableStageLayout(event) {
+    const lines = [`[${game.i18n.localize("RMU_STORYBOARD.Wizard.Log.PositionsUpdated")}]`];
+    event.zones.forEach((z) => lines.push(` - ${z.name}: ${z.actors.join(", ")}`));
+    return lines;
+}
+
+/**
+ * Helper: Formats standard combat actions, resolving AoE impacts and resistance saves.
+ */
+function _compileHumanReadableCombatAction(event) {
+    const lines = [];
+    const hero = event.isHighlighted ? `★ ${game.i18n.localize("RMU_STORYBOARD.Wizard.Log.HeroMoment")}: ` : "";
+    const using = game.i18n.localize("RMU_STORYBOARD.Wizard.Log.Using");
+
+    // Only show parent results if it's NOT an AoE
+    let resultStr = "";
+    if (!event.isAoE && event.result) {
+        resultStr = ` - ${_buildOutcomeString(event.flair, event.result, event.effect, "")}`;
+    }
+
+    // Dynamically prefix the generic spell narrative if the event provoked saves
+    let narrativeStr = event.systemNarrative ? ` ${event.systemNarrative}` : "";
+    if (event.resistances?.length > 0 && event.systemNarrative) {
+        const failPrefix = game.i18n.localize("RMU_STORYBOARD.Wizard.Log.OnResistanceFail");
+        narrativeStr = ` [${failPrefix}: ${event.systemNarrative}]`;
+    }
+
+    // Main action line
+    lines.push(`${hero}${event.source} ${event.actionType} ${event.target} ${using} [${event.weapon}]${resultStr}${narrativeStr}`);
+
+    // Child impacts
+    if (event.isAoE && event.aoeTargets) {
+        event.aoeTargets.forEach((t) => {
+            const outcome = _buildOutcomeString(t.flair, t.result, t.effect, t.systemNarrative);
+            lines.push(`   > ${game.i18n.localize("RMU_STORYBOARD.Wizard.Log.Impact")} (${t.target}): ${outcome}`);
+        });
+    }
+
+    // Child saves
+    if (event.resistances?.length > 0) {
+        event.resistances.forEach((r) => {
+            const outcome = _buildOutcomeString(r.flair, r.result, r.effect, r.systemNarrative);
+            lines.push(`   > ${game.i18n.localize("RMU_STORYBOARD.Wizard.Log.Save")} (${r.source}): ${outcome}`);
+        });
+    }
+
+    return lines;
+}
+
+/**
+ * Helper: Utility to securely concatenate flair, results, effects, and narrative fragments.
+ */
+function _buildOutcomeString(flair, result, effect, narrative) {
+    const formattedFlair = flair ? `${flair} ` : "";
+    const formattedEffect = effect ? ` (${effect})` : "";
+    const formattedNarrative = narrative ? ` ${narrative}` : "";
+
+    return `${formattedFlair}${result || ""}${formattedEffect}${formattedNarrative}`.trim();
 }

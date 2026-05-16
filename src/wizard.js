@@ -38,7 +38,6 @@ export class RMUStoryboardWizard extends HandlebarsApplicationMixin(ApplicationV
      */
     #state = {
         activeTab: "config",
-        promptStyle: "text",
         artStyle: "gritty",
         selectedLogId: "",
         roster: [],
