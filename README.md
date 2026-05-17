@@ -19,6 +19,8 @@ The result? Raw combat logs are transformed into cinematic, multi-page comic boo
 
 See an end-to-end example here: [Example 1](docs/example01.md)
 
+> **Note:** This module does not contain any AI functionality itself, but is designed to work with external AI services.
+
 ## Key features
 
 - **Silent Hook Ingestion:** Automatically captures attacks, spells, resistance rolls, and area-of-effect impacts during combat, saving them securely to a Journal Entry.
