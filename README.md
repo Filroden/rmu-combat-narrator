@@ -13,7 +13,7 @@
 
 This module is designed exclusively for the Rolemaster Unified (RMU) system.
 
-Rolemaster combats are famously detailed, featuring highly tactical phases, specific hit locations, and devastating critical injuries. The **RMU Combat Storyboard** is a Game Master utility that captures this rich mechanical data and translates it into a highly compressed, token-efficient prompt designed for external Large Language Models (LLMs like ChatGPT, Gemini, or Claude).
+Rolemaster combats are famously detailed, featuring highly tactical phases, specific hit locations, and devastating critical injuries. The **RMU Combat Storyboard** is a GM utility that captures this rich mechanical data and translates it into a highly compressed, token-efficient prompt designed for external Large Language Models (LLMs like ChatGPT, Gemini, or Claude).
 
 The result? Raw combat logs are transformed into cinematic, multi-page comic book scripts and detailed image generation prompts, allowing you to immortalise your group's most epic battles.
 
@@ -23,8 +23,8 @@ See an end-to-end example here: [Example 1](docs/example01.md)
 
 ## Key features
 
-- **Silent Hook Ingestion:** Automatically captures attacks, spells, resistance rolls, and area-of-effect impacts during combat, saving them securely to a Journal Entry.
-- **The Storyboard Wizard:** A dedicated UI accessible from the Combat Tracker to curate your combat highlight reel.
+- **Silent Hook Ingestion:** Automatically captures attacks, spells, resistance rolls, and applied damage during combat, saving them to a Journal Entry.
+- **The Storyboard Wizard:** A dedicated UI accessible from the Combat Tracker sidebar to review your combat highlight reel.
 - **Cast & Roster Management:** Define the visual descriptions of your combatants and the environment to ensure AI consistency.
 - **Hero Moments:** Flag specific attacks or critical hits to guarantee they become the focal point of the generated story.
 - **Plain Text Export:** For GMs who just want a clean, human-readable summary of the battle without using AI, the module provides a one-click downloadable text log.
